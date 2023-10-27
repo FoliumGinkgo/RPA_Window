@@ -86,6 +86,9 @@
     <Compile Include="pages\ProjectPage.xaml.cs">
       <DependentUpon>ProjectPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="pages\SettingWindow.xaml.cs">
+      <DependentUpon>SettingWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="views\HomeWindow.xaml.cs">
       <DependentUpon>HomeWindow.xaml</DependentUpon>
     </Compile>
@@ -106,6 +109,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="pages\ProjectPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="pages\SettingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

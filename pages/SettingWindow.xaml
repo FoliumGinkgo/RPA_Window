@@ -1,0 +1,30 @@
+﻿<Window x:Class="链友融RPA.pages.SettingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:链友融RPA.pages"
+        xmlns:hc="clr-namespace:HandyControl.Controls;assembly=HandyControl"
+        mc:Ignorable="d" ResizeMode="CanMinimize" Background="Transparent"
+        Title="" Height="300" Width="200" FontWeight="Light" WindowStyle="None">
+    <Border Background="White" CornerRadius="10">
+        <Grid >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Background="#0078d4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <TextBlock Text="&#xe67e; 系统设置" Foreground="White" FontFamily="{StaticResource IconFont}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <Button Click="Click_Close" Content="&#xe668;" Foreground="White" Background="Transparent" BorderThickness="0" FontFamily="{StaticResource IconFont}"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

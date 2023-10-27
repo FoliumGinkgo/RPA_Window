@@ -22,7 +22,27 @@ namespace RPA_Window.pages
         {
             Button btn = sender as Button;
             FileAttribute data = btn.DataContext as FileAttribute;
-            app.ExecuteLists.Remove(data); 
+            int index = app.ExecuteLists.IndexOf(data);
+            
+            if (app.ExecuteLists.Remove(data))
+            {
+                if (index <= App.index)
+                {
+                    App.index--;
+                    if (index == App.index)
+                    {
+                        App.CancelFlag = true;
+                    }
+                }
+                
+            }
+        }
+
+        private void Click_Pinned(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            FileAttribute data = btn.DataContext as FileAttribute;
+            app.ExecuteLists.Move(app.ExecuteLists.IndexOf(data),App.index+1);
         }
     }
 }

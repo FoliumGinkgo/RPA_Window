@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,5 +19,7 @@ namespace RPA_Window.model
         public string Status { get; set; }
         public bool IsExecute { get; set; }
         public string FontColor { get; set; }
+        public Process Processing { get; set; }
+        
     }
 }

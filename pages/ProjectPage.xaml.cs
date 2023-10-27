@@ -19,13 +19,14 @@ namespace RPA_Window.pages
             dataGrid.ItemsSource = app.FileAttributes;
             
         }
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Click_Execute(object sender, RoutedEventArgs e)
         {
             Button btn = (Button)sender;
             FileAttribute data = btn.DataContext as FileAttribute;
             data.Status = "正在等待执行";
             app.ExecuteLists.Add(data);
             Console.WriteLine(data.ID);
+            app.ExecuteTask();
         }
 
         private void Click_Refresh(object sender, RoutedEventArgs e)

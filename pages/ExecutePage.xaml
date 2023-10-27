@@ -24,13 +24,19 @@
     <Grid>
         <DataGrid x:Name="executeDataGrid" RowStyle="{StaticResource DataGridItemStyle}" CanUserSortColumns="False" Background="#eeeeee" Style="{StaticResource DataGridBaseStyle}" AutoGenerateColumns="False" ColumnWidth="*" IsReadOnly="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="项目名称" Foreground="{Binding FontColor}" Binding="{Binding FileName}"/>
-                <DataGridTextColumn Header="执行状态" Binding="{Binding Status}"/>
+                <DataGridTextColumn Header="项目名称" Binding="{Binding FileName}"/>
+                <DataGridTemplateColumn Header="执行状态">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Status}" Foreground="{Binding FontColor}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn> 
                 <DataGridTemplateColumn Header="操作">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <Button Margin="0 0 5 0" Content="置顶" Style="{StaticResource ButtonDashedSuccess.Small}" IsEnabled="{Binding Flag}" FontSize="12" FontFamily="{StaticResource TextFont}" FontWeight="Light"/>
+                                <Button Click="Click_Pinned" Margin="0 0 5 0" Content="置顶" Style="{StaticResource ButtonDashedSuccess.Small}" IsEnabled="{Binding Flag}" FontSize="12" FontFamily="{StaticResource TextFont}" FontWeight="Light"/>
                                 <Button Click="Click_Cancel" Content="取消" Style="{StaticResource ButtonDashedDanger.Small}" FontSize="12" FontWeight="Light"/>
                             </StackPanel>
                         </DataTemplate>

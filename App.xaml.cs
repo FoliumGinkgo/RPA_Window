@@ -3,6 +3,7 @@ using RPA_Window.model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
@@ -20,121 +21,129 @@ namespace RPA_Window
     public partial class App : Application
     {
         private string uiRobotPath = "C:\\Program Files (x86)\\UiPath\\Studio\\UiRobot.exe";
-        public int index = 0;
+        public static int index = 0;
+        private bool startFlag;
+        public static bool CancelFlag=false;
         public ObservableCollection<FileAttribute> FileAttributes { get; set; } = new ObservableCollection<FileAttribute>();
         public ObservableCollection<FileAttribute> ExecuteLists { get; set; } = new ObservableCollection<FileAttribute>();
         public App()
         {
-            //Thread thread = new Thread(ExecuteThread);
-            //thread.Start();
+            ExecuteLists.CollectionChanged += CollectionChangedHandler;
         }
 
-        private async void  ExecuteTask()
+        private void CollectionChangedHandler(object sender, NotifyCollectionChangedEventArgs e)
         {
-            await Task.Run(() =>
+            if(e.Action == NotifyCollectionChangedAction.Add)
             {
-                for (index=index; index < ExecuteLists.Count; index++)
-                {
-                    FileAttribute attribute = ExecuteLists[index];
-                    attribute.Status = "正在执行中...";
-                }
-            });
-            
-        }
-
-        private void ExecuteThread()
-        {
-            while (true)
+                Console.WriteLine(e.NewItems[0]);
+            }else if(e.Action == NotifyCollectionChangedAction.Remove)
             {
-                
-                int count = ExecuteLists.Count;
-                for (int i=0;i< ExecuteLists.Count && !ExecuteLists[i].IsExecute; i++)
-                {
-                    if (count>ExecuteLists.Count)
-                    {
-                        i = i - (count - ExecuteLists.Count);
-                    }
-                    FileAttribute attribute = ExecuteLists[i];
-                    attribute.Status = "正在执行 . . .";
-                    attribute.IsCurrent = true;
-                    attribute.IsExecute = true;
-                    string path = "";
-                    string[] files = Directory.GetFiles(attribute.FilePath);
-                    foreach (string file in files)
-                    {
-                        if (file.EndsWith("\\Main.xaml"))
-                        {
-                            path = file;
-                        }
-                    }
-                    if (path.Equals(""))
-                    {
-                        attribute.IsCurrent = false;
-                        Console.WriteLine("执行异常[未找执行入口]");
-                        attribute.Status = "执行异常[未找执行入口]";
-                        continue;
-                    }
-                    ProcessStartInfo processStartInfo = new ProcessStartInfo
-                    {
-                        FileName = uiRobotPath,
-                        Arguments = $"-file \"{path}\"",
-                        UseShellExecute = false,
-                        RedirectStandardOutput = true,
-                        RedirectStandardError = true,
-                        CreateNoWindow = true
-                    };
-                    Process process = new Process();
-                    process.StartInfo = processStartInfo;
-
-                    process.ErrorDataReceived += (sender, e) =>
-                    {
-                        if (!String.IsNullOrEmpty(e.Data))
-                        {
-                            Console.WriteLine(e.Data);
-                            Dialog.Show(e.Data);
-                        }
-                        
-                    };
-                    
-                    process.OutputDataReceived += (sender, e) =>
-                    {
-                        if (!String.IsNullOrEmpty(e.Data))
-                        {
-                            attribute.Status = "执行异常";
-                            Console.WriteLine(e.Data);
-                        }                   
-                    };
-
-                    process.Start();
-                    process.BeginErrorReadLine();
-                    process.BeginOutputReadLine();
-
-                    process.WaitForExit();
-
-                    int code = process.ExitCode;
-                    
-                    if (code == 0)
-                    {
-                        Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            i=ExecuteLists.Remove(attribute)?i-1:i;
-                        });
-
-                    }
-                    else
-                    {
-                        Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            attribute.Status = "执行异常";
-                            Dialog.Show("执行出现异常");
-                        });
-                    }
-                    attribute.IsCurrent = false;
-                    Thread.Sleep(1000);
-                }
+                Console.WriteLine(e.OldItems[0]);
             }
         }
 
+        public async void  ExecuteTask()
+        {
+            int Count = ExecuteLists.Count;
+            if (startFlag)
+            {
+                return;
+            }else{
+                startFlag = true;
+            }
+            for (index = index; index < Count; index++)
+            {
+                Console.WriteLine(index);
+                if (ExecuteLists[index].IsExecute)
+                {
+                    continue;
+                }
+                FileAttribute attribute = ExecuteLists[index];
+                attribute.Status = "正在执行中...";
+                attribute.Flag = false;
+                attribute.IsCurrent = true;
+                attribute.IsExecute = true;
+                attribute.FontColor = "#0078d4";
+                string path = "";
+                string[] files = Directory.GetFiles(attribute.FilePath);
+                foreach (string file in files)
+                {
+                    if (file.EndsWith("\\Main.xaml"))
+                    {
+                        path = file;
+                    }
+                }
+
+                if (path.Equals(""))
+                {
+                    attribute.IsCurrent = false;
+                    attribute.FontColor = "red";
+                    Console.WriteLine("执行异常[未找执行入口]");
+                    attribute.Status = "执行异常[未找执行入口]";
+                    continue;
+                }
+
+                ProcessStartInfo processStartInfo = new ProcessStartInfo
+                {
+                    FileName = uiRobotPath,
+                    Arguments = $"-file \"{path}\"",
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    CreateNoWindow = true
+                };
+                Process process = new Process();
+                process.StartInfo = processStartInfo;
+
+                process.ErrorDataReceived += (sender, e) =>
+                {
+                    if (!String.IsNullOrEmpty(e.Data))
+                    {
+                        attribute.FontColor = "red";
+                        attribute.Status = "执行异常";
+                    }
+
+                };
+
+                process.OutputDataReceived += (sender, e) =>
+                {
+                    if (!String.IsNullOrEmpty(e.Data))
+                    {
+                        //处理输出信息
+                    }
+                };
+
+                process.Start();
+                process.BeginErrorReadLine();
+                process.BeginOutputReadLine();
+                process.WaitForExit();
+
+                //IsCancel(process,attribute);
+
+                int code = process.ExitCode;
+
+                if (code == 0)
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        ExecuteLists.Remove(attribute);
+                        index--;
+                    });
+
+
+                }
+                else
+                {
+                    attribute.FontColor = "red";
+                    attribute.Status = "执行异常";
+                }
+                attribute.IsCurrent = false;
+                await Task.Delay(1000);
+            }
+            startFlag = false;
+
+            Console.WriteLine(index);
+        }
         public void RefreshList()
         {
             FileAttributes.Clear();
@@ -147,8 +156,7 @@ namespace RPA_Window
             foreach (string file in files)
             {
                 DateTime dateTime = Directory.GetLastWriteTime(file);
-                string date = dateTime.ToString("yyyy/MM/dd HH:mm:ss");
-                date = dateTime.ToString("yyyy/MM").Equals(DateTime.Now.ToString("yyyy/MM"))
+                string date = dateTime.ToString("yyyy/MM").Equals(DateTime.Now.ToString("yyyy/MM"))
                     ? dateTime.ToString("yyyy/MM/dd").Equals(DateTime.Now.ToString("yyyy/MM/dd"))
                     ? "今天" : (DateTime.Now - dateTime).Days.ToString() + " 天前" : dateTime.ToString("yyyy/MM/dd");
                 FileAttributes.Add(new FileAttribute()
