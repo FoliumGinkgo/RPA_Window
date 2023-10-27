@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34202.233
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RPA_Window", "RPA_Window.csproj", "{90F9E971-A101-408B-AC8B-0772A930C0E5}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "链友融RPA", "..\链友融RPA\链友融RPA.vdproj", "{034D25F6-4100-46E9-9DE0-B688E672B057}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{90F9E971-A101-408B-AC8B-0772A930C0E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90F9E971-A101-408B-AC8B-0772A930C0E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90F9E971-A101-408B-AC8B-0772A930C0E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90F9E971-A101-408B-AC8B-0772A930C0E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{034D25F6-4100-46E9-9DE0-B688E672B057}.Debug|Any CPU.ActiveCfg = Debug
+		{034D25F6-4100-46E9-9DE0-B688E672B057}.Release|Any CPU.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {21EDB2D6-DAB4-4968-9AE4-6D15445A996A}
+	EndGlobalSection
+EndGlobal

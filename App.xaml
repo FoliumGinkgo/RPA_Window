@@ -1,0 +1,16 @@
+﻿<Application x:Class="RPA_Window.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:RPA_Window"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <FontFamily x:Key="IconFont" >/RPA_Window;component/resources/fonts/iconfont.ttf#iconfont</FontFamily>
+            <FontFamily x:Key="TextFont" >/RPA_Window;component/resources/fonts/simyou.ttf#simyou</FontFamily>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
