@@ -56,26 +56,48 @@
                     </StackPanel>
                     <StackPanel VerticalAlignment="Center" Grid.Column="1" Orientation="Horizontal">
                         <Button Click="Click_Message" Content="&#xe68a;" FontSize="14" Foreground="White" Background="Transparent" BorderThickness="0" FontFamily="{StaticResource IconFont}"/>
-                        <Button Click="Click_Setting" Content="&#xe67e;" FontSize="14" Foreground="White" Background="Transparent" BorderThickness="0" FontFamily="{StaticResource IconFont}"/>
+                        <ToggleButton Content="&#xe67e;" FontSize="14" Foreground="White" Background="Transparent" BorderThickness="0" FontFamily="{StaticResource IconFont}" IsChecked="{Binding IsOpen,ElementName=LeftDrawer}"/>
                         <Button Click="Click_Min"  Content="&#xe67a;" FontSize="18" Foreground="White" Background="Transparent" BorderThickness="0" FontFamily="{StaticResource IconFont}"/>
                         <Button Click="Click_Close" Content="&#xe668;" FontSize="16" Foreground="White" Background="Transparent" BorderThickness="0" FontFamily="{StaticResource IconFont}"/>
                     </StackPanel>
 
                 </Grid>
             </Border>
-            <Border Grid.Row="2" CornerRadius="10">
-                <hc:TabControl BorderThickness="0" Background="White" Style="{StaticResource TabControlInLine}">
-                    <hc:TabItem FontSize="13" FontFamily="{StaticResource TextFont}" Background="#FFFFFF" Height="35" Header="项目列表">
-                        <Frame Source="../pages/ProjectPage.xaml"/>
-                    </hc:TabItem>
-                    <hc:TabItem FontSize="13" FontFamily="{StaticResource TextFont}" Background="#FFFFFF" Height="35" Header="执行列表">
-                        <Frame Source="../pages/ExecutePage.xaml"/>
-                    </hc:TabItem>
-                    <hc:TabItem FontSize="13" FontFamily="{StaticResource TextFont}" Background="#FFFFFF" Height="35" Header="执行日志">
-                        
-                    </hc:TabItem>
-                </hc:TabControl>
-            </Border>
+            <hc:SimplePanel Grid.Row="2">
+                <Border>
+                    <hc:TabControl BorderThickness="0" Background="White" Style="{StaticResource TabControlInLine}">
+                        <hc:TabItem FontSize="13" FontFamily="{StaticResource TextFont}" Background="#FFFFFF" Height="35" Header="项目列表">
+                            <Frame Source="../pages/ProjectPage.xaml"/>
+                        </hc:TabItem>
+                        <hc:TabItem FontSize="13" FontFamily="{StaticResource TextFont}" Background="#FFFFFF" Height="35" Header="执行列表">
+                            <Frame Source="../pages/ExecutePage.xaml"/>
+                        </hc:TabItem>
+                        <hc:TabItem FontSize="13" FontFamily="{StaticResource TextFont}" Background="#FFFFFF" Height="35" Header="执行日志">
+
+                        </hc:TabItem>
+                    </hc:TabControl>
+                </Border>
+                <hc:Drawer Dock="Left" ShowMode="Press" Name="LeftDrawer">
+                    <Border Style="{StaticResource BorderClip}" CornerRadius="5" Width="250" Background="White">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0"  Background="Teal" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="&#xe67e; 系统设置" Foreground="White" Padding="15" FontSize="14" FontFamily="{StaticResource IconFont}"/>
+                                <Button Cursor="Hand" Foreground="White" Click="Click_Setting" Grid.Column="1" Style="{StaticResource ButtonIcon.Small}" FontSize="14" Margin="0 0 10 0" Background="Transparent" BorderThickness="0" hc:IconElement.Geometry="{StaticResource DeleteFillCircleGeometry}"/>
+                            </Grid>
+                            
+                        </Grid>
+                    </Border>
+                </hc:Drawer>
+            </hc:SimplePanel>
+
         </Grid>
     </Border>
 </Window>

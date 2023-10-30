@@ -24,7 +24,7 @@
                 </Grid.ColumnDefinitions>
                 
                 <StackPanel Grid.Column="0" HorizontalAlignment="Left" Orientation="Horizontal">
-                    <Button Click="Click_Refresh" Style="{StaticResource ButtonDashedDanger.Small}" Content="&#xe786;" FontSize="16" Background="Transparent" BorderThickness="0" FontFamily="{StaticResource IconFont}"/>
+                    <Button Click="Click_Refresh" Content="&#xe786;" FontSize="16" FontFamily="{StaticResource IconFont}"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal">
                     <hc:SearchBar Background="#80FFFFFF" MinWidth="200" hc:InfoElement.Placeholder="名称关键词"  Style="{StaticResource SearchBarPlus}"/>

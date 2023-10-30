@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using 链友融RPA.pages;
 
 namespace RPA_Window.views
 {
@@ -32,7 +33,9 @@ namespace RPA_Window.views
         }
         private void Click_Setting(object sender, RoutedEventArgs e)
         {
-            
+            //SettingWindow settingWindow = new SettingWindow();
+            //settingWindow.ShowDialog();
+            LeftDrawer.IsOpen = false;
         }
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)

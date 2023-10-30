@@ -12,24 +12,24 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace 链友融RPA.pages
+namespace 链友融RPA.dialog
 {
     /// <summary>
-    /// SettingWindow.xaml 的交互逻辑
+    /// MessageDialog.xaml 的交互逻辑
     /// </summary>
-    public partial class SettingWindow : Window
+    public partial class MessageDialog : Window
     {
-        public SettingWindow()
+        public MessageDialog()
         {
             InitializeComponent();
         }
 
-        private void Click_Close(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Close();
         }
 
-        private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
+        private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
             this.DragMove();
         }

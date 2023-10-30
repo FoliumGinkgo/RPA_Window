@@ -60,7 +60,8 @@ namespace RPA_Window
             {
                 if (key != null)
                 {
-                    this.Close();
+                    //Task.Delay(3000);
+                    Close();
                     timer.Stop();
                     homeWindow.Show();
                     //MessageBox.Show("UiPath 已安装。");

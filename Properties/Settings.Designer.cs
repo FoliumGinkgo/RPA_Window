@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace 链友融RPA.Properties {
+namespace RPA_Window.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

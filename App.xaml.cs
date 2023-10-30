@@ -12,6 +12,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Markup;
+using 链友融RPA.dialog;
 
 namespace RPA_Window
 {
@@ -21,37 +23,39 @@ namespace RPA_Window
     public partial class App : Application
     {
         private string uiRobotPath = "C:\\Program Files (x86)\\UiPath\\Studio\\UiRobot.exe";
-        public static int index = 0;
-        private bool startFlag;
-        public static bool CancelFlag=false;
+        public static bool Flag=false;
         public ObservableCollection<FileAttribute> FileAttributes { get; set; } = new ObservableCollection<FileAttribute>();
         public ObservableCollection<FileAttribute> ExecuteLists { get; set; } = new ObservableCollection<FileAttribute>();
         public App()
         {
             ExecuteLists.CollectionChanged += CollectionChangedHandler;
+            Thread thread = new Thread(ExecuteTask);
         }
 
         private void CollectionChangedHandler(object sender, NotifyCollectionChangedEventArgs e)
         {
             if(e.Action == NotifyCollectionChangedAction.Add)
             {
-                Console.WriteLine(e.NewItems[0]);
+                if (!Flag)
+                {
+                    //ExecuteTask();
+                }
             }else if(e.Action == NotifyCollectionChangedAction.Remove)
             {
-                Console.WriteLine(e.OldItems[0]);
+                //FileAttribute attribute = e.OldItems[0] as FileAttribute;
+                /*if (attribute.Processing != null)
+                {
+                    attribute.Processing.Kill();
+                }*/
+
             }
         }
 
-        public async void  ExecuteTask()
+        public void  ExecuteTask()
         {
-            int Count = ExecuteLists.Count;
-            if (startFlag)
-            {
-                return;
-            }else{
-                startFlag = true;
-            }
-            for (index = index; index < Count; index++)
+            int count = ExecuteLists.Count;
+            Flag = true;
+            for (int index = 0; index < count; index++)
             {
                 Console.WriteLine(index);
                 if (ExecuteLists[index].IsExecute)
@@ -59,10 +63,9 @@ namespace RPA_Window
                     continue;
                 }
                 FileAttribute attribute = ExecuteLists[index];
-                attribute.Status = "正在执行中...";
+                attribute.Status = "正在执行...";
                 attribute.Flag = false;
                 attribute.IsCurrent = true;
-                attribute.IsExecute = true;
                 attribute.FontColor = "#0078d4";
                 string path = "";
                 string[] files = Directory.GetFiles(attribute.FilePath);
@@ -77,8 +80,8 @@ namespace RPA_Window
                 if (path.Equals(""))
                 {
                     attribute.IsCurrent = false;
+                    attribute.IsExecute = true;
                     attribute.FontColor = "red";
-                    Console.WriteLine("执行异常[未找执行入口]");
                     attribute.Status = "执行异常[未找执行入口]";
                     continue;
                 }
@@ -92,20 +95,22 @@ namespace RPA_Window
                     RedirectStandardError = true,
                     CreateNoWindow = true
                 };
-                Process process = new Process();
-                process.StartInfo = processStartInfo;
+                attribute.Processing= new Process();
 
-                process.ErrorDataReceived += (sender, e) =>
+                attribute.Processing.StartInfo = processStartInfo;
+
+                attribute.Processing.ErrorDataReceived += (sender, e) =>
                 {
                     if (!String.IsNullOrEmpty(e.Data))
                     {
                         attribute.FontColor = "red";
                         attribute.Status = "执行异常";
+                        attribute.IsExecute = true;
                     }
 
                 };
 
-                process.OutputDataReceived += (sender, e) =>
+                attribute.Processing.OutputDataReceived += (sender, e) =>
                 {
                     if (!String.IsNullOrEmpty(e.Data))
                     {
@@ -113,19 +118,31 @@ namespace RPA_Window
                     }
                 };
 
-                process.Start();
-                process.BeginErrorReadLine();
-                process.BeginOutputReadLine();
-                process.WaitForExit();
-
-                //IsCancel(process,attribute);
-
-                int code = process.ExitCode;
+                attribute.Processing.Start();
+                //attribute.Processing.BeginErrorReadLine();
+                //attribute.Processing.BeginOutputReadLine();
+                attribute.Processing.WaitForExit();
+                string error = attribute.Processing.StandardError.ReadToEnd();
+                Console.WriteLine(error);
+                if (!error.Equals(""))
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        MessageDialog dialog = new MessageDialog();
+                        dialog.title.Text = "异常提醒";
+                        dialog.message.Text = error;
+                        dialog.ok.Content = "确定";
+                        dialog.ShowDialog();
+                    });
+                }
+                
+                int code = attribute.Processing.ExitCode;
 
                 if (code == 0)
                 {
                     Application.Current.Dispatcher.Invoke(() =>
                     {
+                        attribute.Processing = null;
                         ExecuteLists.Remove(attribute);
                         index--;
                     });
@@ -136,13 +153,14 @@ namespace RPA_Window
                 {
                     attribute.FontColor = "red";
                     attribute.Status = "执行异常";
+                    attribute.IsExecute = true;
+                    attribute.Processing = null;
                 }
                 attribute.IsCurrent = false;
-                await Task.Delay(1000);
+                count = ExecuteLists.Count;
+                Task.Delay(1000);
             }
-            startFlag = false;
-
-            Console.WriteLine(index);
+            Flag = false;
         }
         public void RefreshList()
         {
@@ -172,7 +190,7 @@ namespace RPA_Window
                     FontColor = "#000000",
                     Status = "待添加执行"
                 }); ;
-                Task.Delay(100);
+                Task.Delay(3000);
             }
         }
     }
