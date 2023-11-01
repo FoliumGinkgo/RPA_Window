@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using 链友融RPA.pages;
@@ -18,6 +14,7 @@ namespace RPA_Window.views
         public HomeWindow()
         {
             InitializeComponent();
+            folderList.ItemsSource = app.Folder;
         }
 
         private void Click_Min(object sender, RoutedEventArgs e)
@@ -46,6 +43,24 @@ namespace RPA_Window.views
         private void Click_Message(object sender, RoutedEventArgs e)
         {
             
+        }
+
+        private void Folder_Click(object sender, RoutedEventArgs e)
+        {
+            using (System.Windows.Forms.FolderBrowserDialog folderDialog = new System.Windows.Forms.FolderBrowserDialog())
+            {
+                folderDialog.Description = "请选择一个文件夹";
+                folderDialog.RootFolder = Environment.SpecialFolder.Desktop;
+
+                // 显示对话框并获取用户的选择
+                if (folderDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    // 用户选择的文件夹路径
+                    string selectedFolder = folderDialog.SelectedPath;
+                    folderText.Text = selectedFolder;
+                    app.Folder.Add(selectedFolder);
+                }
+            }
         }
     }
 }

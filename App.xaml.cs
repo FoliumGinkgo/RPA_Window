@@ -26,6 +26,8 @@ namespace RPA_Window
         public static bool Flag=false;
         public ObservableCollection<FileAttribute> FileAttributes { get; set; } = new ObservableCollection<FileAttribute>();
         public ObservableCollection<FileAttribute> ExecuteLists { get; set; } = new ObservableCollection<FileAttribute>();
+        public ObservableCollection<String>  Folder{ get; set; } = new ObservableCollection<String>();
+        public static SqliteHelper sqlite=new SqliteHelper();
         public App()
         {
             ExecuteLists.CollectionChanged += CollectionChangedHandler;

@@ -17,18 +17,18 @@ namespace RPA_Window
         public SqliteHelper()
         {
             connectionString = $"Data Source=lyr_rpa.db;Version=3;";
-            string createTableSql = "CREATE TABLE IF NOT EXISTS MyTable (Id INTEGER PRIMARY KEY, Name TEXT, Age INTEGER);";
-            ExecuteNonQuery(createTableSql);
+            string createTableSql = "CREATE TABLE IF NOT EXISTS folder (folder_path TEXT);";
+            Console.WriteLine(ExecuteNonQuery(createTableSql));
         }
 
-        public void ExecuteNonQuery(string sql)
+        public int ExecuteNonQuery(string sql)
         {
             using (var connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
                 using (var command = new SQLiteCommand(sql, connection))
                 {
-                    command.ExecuteNonQuery();
+                    return command.ExecuteNonQuery();
                 }
             }
         }
