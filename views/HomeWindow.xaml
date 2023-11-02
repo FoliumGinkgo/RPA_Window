@@ -5,6 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RPA_Window.views"
+        
         xmlns:hc="clr-namespace:HandyControl.Controls;assembly=HandyControl"
         mc:Ignorable="d" Height="450" Width="500" WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize" AllowsTransparency="True" Background="{x:Null}">
     <Window.Resources>
@@ -77,7 +78,7 @@
                         </hc:TabItem>
                     </hc:TabControl>
                 </Border>
-                <hc:Drawer Dock="Left" ShowMode="Press" Name="LeftDrawer">
+                <hc:Drawer Dock="Right" ShowMode="Press" Name="LeftDrawer">
                     <Border Style="{StaticResource BorderClip}" CornerRadius="5" Width="250" Background="White">
                         <Grid>
                             <Grid.RowDefinitions>
@@ -98,10 +99,10 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <hc:TextBox Name="folderText" BorderThickness="0 0 0 1" Style="{StaticResource TextBox.Small}" Grid.Column="0" Text="选择添加项目路径" MaxHeight="25" />
-                                    <Button Click="Folder_Click" Grid.Column="1" Content="&#xe764;" Style="{StaticResource ButtonInfo.Small}"/>
+                                    <hc:TextBox Foreground="Gray" Name="folderText" BorderThickness="0 0 0 1" Style="{StaticResource TextBox.Small}" Grid.Column="0" Text="选择添加项目路径" MaxHeight="25" />
+                                    <Button Click="Folder_Click" Grid.Column="1" Content="&#xe764;" Style="{StaticResource ButtonPrimary.Small}" FontFamily="{StaticResource IconFont}"/>
                                 </Grid>
-                                <ListBox x:Name="folderList" >
+                                <ListBox SelectionChanged="folderList_SelectionChanged" x:Name="folderList" MinHeight="98" MaxHeight="98">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             <Grid>
@@ -109,14 +110,32 @@
                                                     <ColumnDefinition Width="*"/>
                                                     <ColumnDefinition Width="auto"/>
                                                 </Grid.ColumnDefinitions>
-                                                <TextBlock hc:Poptip.Placement="BottomLeft" hc:Poptip.Content="{Binding}" Padding="0 0 5 0" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" VerticalAlignment="Center" Grid.Column="0" Text="{Binding}">
-                                                    
-                                                </TextBlock>
-                                                <Button Content="&#xe641;" Grid.Column="1" Style="{StaticResource ButtonPrimary.Small}"/>
+                                                <TextBlock Grid.Column="0" MinWidth="200" MaxWidth="200" HorizontalAlignment="Left" hc:Poptip.Placement="BottomLeft" hc:Poptip.Content="{Binding}" Padding="0 0 10 0" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" VerticalAlignment="Center" Text="{Binding}"/>
+                                                <Button Click="Click_RemoveFolder" HorizontalAlignment="Right" Content="&#xe641;" Grid.Column="1" Style="{StaticResource ButtonDanger.Small}" FontFamily="{StaticResource IconFont}"/>
                                             </Grid>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
                                 </ListBox>
+                                <TextBlock HorizontalAlignment="Left" Padding="0 10 0 10" Foreground="Gray" FontSize="12" Style="{StaticResource TextBlockDefaultThiLight}" Text="移除的项目列表"/>
+                                <ListBox x:Name="removeProjectList" MinHeight="98" MaxHeight="98">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Column="0" MinWidth="200" MaxWidth="200" HorizontalAlignment="Left" hc:Poptip.Placement="BottomLeft" Padding="0 0 10 0" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" VerticalAlignment="Center" Text="{Binding FolderName}"/>
+                                                <Button Click="Click_RemoveFolderName" HorizontalAlignment="Right" Content="&#xe658;" Grid.Column="1" Style="{StaticResource ButtonDanger.Small}" FontFamily="{StaticResource IconFont}"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                                <StackPanel VerticalAlignment="Bottom" Orientation="Vertical" Margin="0 10 0 10">
+                                    <Button HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Style="{StaticResource ButtonPrimary}" Content="检测更新"/>
+                                    
+                                </StackPanel>
+                                
                             </StackPanel>
                         </Grid>
                     </Border>

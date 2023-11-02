@@ -16,24 +16,67 @@ namespace RPA_Window
 
         public SqliteHelper()
         {
-            connectionString = $"Data Source=lyr_rpa.db;Version=3;";
-            string createTableSql = "CREATE TABLE IF NOT EXISTS folder (folder_path TEXT);";
-            Console.WriteLine(ExecuteNonQuery(createTableSql));
+            connectionString = "Data Source=lyr_rpa.db;Version=3;";
+            InitializeDatabase();
         }
 
-        public int ExecuteNonQuery(string sql)
+        private void InitializeDatabase()
+        {
+            // 在初始化时创建数据库表
+            using (var connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+                using (var command = new SQLiteCommand())
+                {
+                    command.Connection = connection;
+                    command.CommandText = "CREATE TABLE IF NOT EXISTS folders (folder_path TEXT);";
+                    command.ExecuteNonQuery();
+                    command.CommandText = "CREATE TABLE IF NOT EXISTS remove_projects (folder_path TEXT);";
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public int InsertData(string sql)
         {
             using (var connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
                 using (var command = new SQLiteCommand(sql, connection))
                 {
-                    return command.ExecuteNonQuery();
+                    int rowsAffected = command.ExecuteNonQuery();
+                    return rowsAffected; // 返回受影响的行数
                 }
             }
         }
 
-        public DataTable ExecuteQuery(string sql)
+        public int UpdateData(string sql)
+        {
+            using (var connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+                using (var command = new SQLiteCommand(sql, connection))
+                {
+                    int rowsAffected = command.ExecuteNonQuery();
+                    return rowsAffected; // 返回受影响的行数
+                }
+            }
+        }
+
+        public int DeleteData(string sql)
+        {
+            using (var connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+                using (var command = new SQLiteCommand(sql, connection))
+                {
+                    int rowsAffected = command.ExecuteNonQuery();
+                    return rowsAffected; // 返回受影响的行数
+                }
+            }
+        }
+
+        public DataTable QueryData(string sql)
         {
             using (var connection = new SQLiteConnection(connectionString))
             {
@@ -44,11 +87,10 @@ namespace RPA_Window
                     {
                         var dataTable = new DataTable();
                         adapter.Fill(dataTable);
-                        return dataTable;
+                        return dataTable; // 返回查询结果
                     }
                 }
             }
         }
     }
-
 }

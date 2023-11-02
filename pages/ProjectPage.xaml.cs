@@ -14,6 +14,7 @@ namespace RPA_Window.pages
     public partial class ProjectPage : Page
     {
         private App app =Application.Current as App;
+        private SqliteHelper sqlite=new SqliteHelper();
         public ProjectPage()
         {
             InitializeComponent();
@@ -48,6 +49,17 @@ namespace RPA_Window.pages
             btn.IsEnabled = false;
             app.RefreshList();
             btn.IsEnabled = true;
+        }
+
+        private void Click_Delete(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            FileAttribute attribute=btn.DataContext as FileAttribute;
+            string sql = $"insert into remove_projects(folder_path) values ('{attribute.FilePath}')";
+            if (sqlite.InsertData(sql) > 0)
+            {
+                app.RefreshList();
+            }
         }
     }
 }

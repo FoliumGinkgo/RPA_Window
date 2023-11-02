@@ -1,5 +1,6 @@
 ﻿using HandyControl.Controls;
 using RPA_Window.model;
+using RPA_Window.utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,7 +14,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Markup;
+using System.Windows.Shapes;
 using 链友融RPA.dialog;
+using Path = System.IO.Path;
 
 namespace RPA_Window
 {
@@ -27,6 +30,7 @@ namespace RPA_Window
         public ObservableCollection<FileAttribute> FileAttributes { get; set; } = new ObservableCollection<FileAttribute>();
         public ObservableCollection<FileAttribute> ExecuteLists { get; set; } = new ObservableCollection<FileAttribute>();
         public ObservableCollection<String>  Folder{ get; set; } = new ObservableCollection<String>();
+        public ObservableCollection<FolderAttribute> RemoveProjectList{ get; set; } = new ObservableCollection<FolderAttribute>();
         public static SqliteHelper sqlite=new SqliteHelper();
         public App()
         {
@@ -167,33 +171,100 @@ namespace RPA_Window
         public void RefreshList()
         {
             FileAttributes.Clear();
-            string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\UiPath";
-            if (!Directory.Exists(path))
+            Folder.Clear();
+            string sql = "select * from folders";
+            DataTable folderTable= sqlite.QueryData(sql);
+            sql= "select * from remove_projects";
+            DataTable folderRemoveTable = sqlite.QueryData(sql);
+            if ( folderTable.Rows.Count>0 )
             {
-                return;
-            }
-            string[] files = Directory.GetDirectories(path);
-            foreach (string file in files)
-            {
-                DateTime dateTime = Directory.GetLastWriteTime(file);
-                string date = dateTime.ToString("yyyy/MM").Equals(DateTime.Now.ToString("yyyy/MM"))
-                    ? dateTime.ToString("yyyy/MM/dd").Equals(DateTime.Now.ToString("yyyy/MM/dd"))
-                    ? "今天" : (DateTime.Now - dateTime).Days.ToString() + " 天前" : dateTime.ToString("yyyy/MM/dd");
-                FileAttributes.Add(new FileAttribute()
+                //获取移除项目的列表
+                foreach (DataRow item in folderRemoveTable.Rows)
                 {
-                    ID = Guid.NewGuid().ToString(),
-                    SerialNumber = FileAttributes.Count + 1,
-                    IsCurrent = false,
-                    Flag = true,
-                    IsExecute = false,
-                    FileName = Path.GetFileName(file),
-                    UpdateTime = date,
-                    FilePath = file,
-                    FontColor = "#000000",
-                    Status = "待添加执行"
-                }); ;
-                Task.Delay(3000);
+                    
+                    RemoveProjectList.Add(
+                        new FolderAttribute
+                        {
+                            FolderPath = item["folder_path"].ToString(),
+                            FolderName = Path.GetFileName(item["folder_path"].ToString())
+                        }) ;
+                    
+                }
+                //获取项目列表
+                foreach (DataRow row in folderTable.Rows)
+                {
+                    
+                    string path = SimpleEncryption.Decrypt(row["folder_path"].ToString(), "lyrrpa");
+                    Folder.Add(path);
+                    string[] files = Directory.GetDirectories(path);
+                    foreach (string file in files)
+                    {
+                        bool exists = false;
+                        foreach (FolderAttribute attribute in RemoveProjectList)
+                        {
+                            if (attribute.FolderPath.Equals(file))
+                            {
+                                exists = true;
+                                break;
+                            }
+                        }
+                        if (exists)
+                        {
+                            continue;
+                        }
+                        DateTime dateTime = Directory.GetLastWriteTime(file);
+                        string date = dateTime.ToString("yyyy/MM").Equals(DateTime.Now.ToString("yyyy/MM"))
+                            ? dateTime.ToString("yyyy/MM/dd").Equals(DateTime.Now.ToString("yyyy/MM/dd"))
+                            ? "今天" : (DateTime.Now - dateTime).Days.ToString() + " 天前" : dateTime.ToString("yyyy/MM/dd");
+                        FileAttributes.Add(new FileAttribute()
+                        {
+                            ID = Guid.NewGuid().ToString(),
+                            SerialNumber = FileAttributes.Count + 1,
+                            IsCurrent = false,
+                            Flag = true,
+                            IsExecute = false,
+                            FileName = Path.GetFileName(file),
+                            UpdateTime = date,
+                            FilePath = file,
+                            FontColor = "#000000",
+                            Status = "待添加执行"
+                        }); ;
+                        
+                    }
+                }
             }
+            else
+            {
+                
+                string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\UiPath";
+                if (!Directory.Exists(path))
+                {
+                    return;
+                }
+                string[] files = Directory.GetDirectories(path);
+                foreach (string file in files)
+                {
+                    DateTime dateTime = Directory.GetLastWriteTime(file);
+                    string date = dateTime.ToString("yyyy/MM").Equals(DateTime.Now.ToString("yyyy/MM"))
+                        ? dateTime.ToString("yyyy/MM/dd").Equals(DateTime.Now.ToString("yyyy/MM/dd"))
+                        ? "今天" : (DateTime.Now - dateTime).Days.ToString() + " 天前" : dateTime.ToString("yyyy/MM/dd");
+                    FileAttributes.Add(new FileAttribute()
+                    {
+                        ID = Guid.NewGuid().ToString(),
+                        SerialNumber = FileAttributes.Count + 1,
+                        IsCurrent = false,
+                        Flag = true,
+                        IsExecute = false,
+                        FileName = Path.GetFileName(file),
+                        UpdateTime = date,
+                        FilePath = file,
+                        FontColor = "#000000",
+                        Status = "待添加执行"
+                    }); ;
+                    
+                }
+            }
+            
         }
     }
 }

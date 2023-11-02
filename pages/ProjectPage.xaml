@@ -46,8 +46,8 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <Button FontSize="12" Click="Click_Execute" FontWeight="Light" Content="运行" Style="{StaticResource ButtonDashedSuccess.Small}"/>
-                                    <Button FontSize="12" Margin="5 0 0 0" FontWeight="Light" Content="删除" Style="{StaticResource ButtonDashedDanger.Small}"/>
+                                    <Button FontSize="12" Click="Click_Execute" FontWeight="Light" Content="&#xe618;" FontFamily="{StaticResource IconFont}" Style="{StaticResource ButtonPrimary.Small}"/>
+                                    <Button FontSize="12" Click="Click_Delete" Margin="5 0 0 0" FontWeight="Light" Content="&#xe658;" FontFamily="{StaticResource IconFont}" Style="{StaticResource ButtonDanger.Small}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

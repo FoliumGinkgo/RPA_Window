@@ -56,6 +56,9 @@
     <StartupObject>
     </StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>logo.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
@@ -103,6 +106,7 @@
       <DependentUpon>MessageDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="model\FileAttribute.cs" />
+    <Compile Include="model\FolderAttribute.cs" />
     <Compile Include="pages\ExecutePage.xaml.cs">
       <DependentUpon>ExecutePage.xaml</DependentUpon>
     </Compile>
@@ -112,6 +116,7 @@
     <Compile Include="pages\SettingWindow.xaml.cs">
       <DependentUpon>SettingWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="utils\SimpleEncryption.cs" />
     <Compile Include="utils\SqliteHelper.cs" />
     <Compile Include="views\HomeWindow.xaml.cs">
       <DependentUpon>HomeWindow.xaml</DependentUpon>
@@ -192,6 +197,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="resources\img\logo.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="logo.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
