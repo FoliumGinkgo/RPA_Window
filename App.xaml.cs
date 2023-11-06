@@ -164,7 +164,6 @@ namespace RPA_Window
                 }
                 attribute.IsCurrent = false;
                 count = ExecuteLists.Count;
-                Task.Delay(1000);
             }
             Flag = false;
         }

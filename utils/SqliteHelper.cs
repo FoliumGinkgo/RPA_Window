@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using System;
+using System.Data;
+using System.Data.SQLite;
+using System.IO;
 
 namespace RPA_Window
 {
-    using System;
-    using System.Data;
-    using System.Data.SQLite;
+    
 
     public class SqliteHelper
     {
@@ -16,7 +14,9 @@ namespace RPA_Window
 
         public SqliteHelper()
         {
-            connectionString = "Data Source=lyr_rpa.db;Version=3;";
+            String dbPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)+"\\RPA";
+            Directory.CreateDirectory(dbPath);
+            connectionString = $"Data Source={dbPath}\\lyr_rpa.db;Version=3;";
             InitializeDatabase();
         }
 

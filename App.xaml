@@ -9,8 +9,8 @@
                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <FontFamily x:Key="IconFont" >/RPA_Window;component/resources/fonts/iconfont.ttf#iconfont</FontFamily>
-            <FontFamily x:Key="TextFont" >/RPA_Window;component/resources/fonts/simyou.ttf#simyou</FontFamily>
+            <FontFamily x:Key="IconFont" >/链友融RPA;component/resources/fonts/iconfont.ttf#iconfont</FontFamily>
+            <FontFamily x:Key="TextFont" >/链友融RPA;component/resources/fonts/simyou.ttf#simyou</FontFamily>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

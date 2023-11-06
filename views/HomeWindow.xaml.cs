@@ -15,7 +15,6 @@ namespace RPA_Window.views
     public partial class HomeWindow : Window
     {
         App app = Application.Current as App;
-        SqliteHelper sqlite=new SqliteHelper();
         public HomeWindow()
         {
             InitializeComponent();
@@ -68,7 +67,7 @@ namespace RPA_Window.views
                     {
                         string sql = $"insert into folders(folder_path) values('{SimpleEncryption.Encrypt(selectedFolder,"lyrrpa")}')";
                         Console.WriteLine(sql);
-                        if (sqlite.InsertData(sql)>0)
+                        if (App.sqlite.InsertData(sql)>0)
                         {
                             app.Folder.Add(selectedFolder);
                             app.RefreshList();
@@ -93,7 +92,7 @@ namespace RPA_Window.views
             Button btn = sender as Button;
             String folder= btn.DataContext.ToString();
             string sql = $"delete from folders where folder_path='{SimpleEncryption.Encrypt(folder,"lyrrpa")}'";
-            if (sqlite.DeleteData(sql) > 0)
+            if (App.sqlite.DeleteData(sql) > 0)
             {
                 app.Folder.Remove(folder);
                 app.RefreshList();
@@ -104,7 +103,7 @@ namespace RPA_Window.views
             Button btn = sender as Button;
             FolderAttribute folder= btn.DataContext as FolderAttribute;
             string sql = $"delete from remove_projects where folder_path='{folder.FolderPath}'";
-            if (sqlite.DeleteData(sql) > 0)
+            if (App.sqlite.DeleteData(sql) > 0)
             {
                 app.RemoveProjectList.Remove(folder);
                 app.RefreshList();
